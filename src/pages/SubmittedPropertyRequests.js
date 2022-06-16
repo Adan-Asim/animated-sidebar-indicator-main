@@ -41,7 +41,7 @@ const Property = props =>
                             {props.property.City}
                         </li>
                         <li>
-                            <span className='text-success'>For Sale</span>
+                            <span className='text-success'>{props.property.PropertyCategory}</span>
                         </li>
                     </ul>
                     <p className=''>{props.property.PropertyTagline}</p>
@@ -49,23 +49,23 @@ const Property = props =>
                 </div>
                 <div className="ms-5 product-meta-bottom style-2">
                     <div className='ms-5'>
-                    <span>
-                        {props.property.Bedrooms} <span>Bedrooms</span>
-                    </span>
-                    <span className="border-none ms-2">
-                        {props.property.Bathrooms} <span>Bathrooms </span>
-                    </span>
-                    <span>
-                        {props.property.AreaSqFt} <span>sqft</span>
-                    </span>
+                        <span>
+                            {props.property.Bedrooms} <span>Bedrooms</span>
+                        </span>
+                        <span className="border-none ms-2">
+                            {props.property.Bathrooms} <span>Bathrooms </span>
+                        </span>
+                        <span>
+                            {props.property.AreaSqFt} <span>sqft</span>
+                        </span>
                     </div>
                 </div>
 
                 <div className='text-center ms-2 mt-4 mb-2'>
-                    <Link to={"../Admin/ForSaleProperties/Edit/Property/" + props.property._id} className="btn ps-3 pe-3 btn-primary">
-                        edit
-                    </Link>
-                    <a href="" onClick={() => { props.deleteProperty(props.property._id); }} className="btn ps-2 pe-2 btn-primary ms-3">
+                    <a onClick={() => { props.approveProperty(props.property); }} className="btn ps-2 pe-2 btn-primary ms-3">
+                        approve
+                    </a>
+                    <a onClick={() => { props.deleteProperty(props.property); }} className="btn ps-2 pe-2 btn-primary ms-3">
                         delete
                     </a>
                 </div>
@@ -77,11 +77,12 @@ const Property = props =>
     </div>
 )
 
-export default class ForSaleProperties extends Component {
+export default class SubmittedPropertyRequests extends Component {
     constructor(props) {
         super(props);
 
         this.deleteProperty = this.deleteProperty.bind(this);
+        this.approveProperty = this.approveProperty.bind(this);
 
         this.state = {
             Properties: []
@@ -90,7 +91,7 @@ export default class ForSaleProperties extends Component {
 
 
     componentDidMount() {
-        axios.get('http://localhost:4000/ForSaleProperties/')
+        axios.get('http://localhost:4000/SubmittedPropertyRequests/')
             .then(response => {
                 this.setState({
                     Properties: response.data
@@ -102,19 +103,46 @@ export default class ForSaleProperties extends Component {
     }
 
 
-    deleteProperty(id) {
-        axios.delete('http://localhost:4000/ForSaleProperties/delete-forSaleProperty/' + id)
-            .then(res => alert("Property removed successfully"))
+    approveProperty(property) {
+        axios.delete('http://localhost:4000/SubmittedPropertyRequests/delete-propertyRequest/' + property._id)
+            .then(res => {
+                console.log(property);
+                if (property.PropertyCategory == "ForSale") {
+                    axios.post('http://localhost:4000/ForSaleProperties/create-forSaleProperty', property)
+                        .then(res => {
+                            alert("Property published Successfully");
+                        })
+                        .catch(res => alert("An unexpected Error occured: " + res.data));
+                }
+                else if (property.PropertyCategory == "ForRent") {
+                    axios.post('http://localhost:4000/ForRentProperties/create-forRentProperty', property)
+                        .then(res => {
+                            alert("Property published Successfully");
+                        })
+                        .catch(res => alert("An unexpected Error occured: " + res.data));
+                }
+            })
             .catch(res => alert(res.data));
         this.setState({
-            Properties: this.state.Properties.filter(p => p._id !== id)
+            Properties: this.state.Properties.filter(p => p._id !== property._id)
         })
     }
 
+
+    deleteProperty(property) {
+        axios.delete('http://localhost:4000/SubmittedPropertyRequests/delete-propertyRequest/' + property._id)
+            .then(res => alert("Property removed successfully"))
+            .catch(res => alert(res.data));
+        this.setState({
+            Properties: this.state.Properties.filter(p => p._id !== property._id)
+        })
+    }
+
+
     PropertyList() {
-        let count=0;
+        let count = 0;
         return this.state.Properties.map(currentproperty => {
-            return <Property property={currentproperty} deleteProperty={this.deleteProperty} key={currentproperty._id} count={count++}/>;
+            return <Property property={currentproperty} deleteProperty={this.deleteProperty} approveProperty={this.approveProperty} key={currentproperty._id} count={count++} />;
         })
     }
 
@@ -122,15 +150,8 @@ export default class ForSaleProperties extends Component {
     render() {
         return (
             <div>
-                <h1 className='text-primary mb-5 text-center bg-white rounded p-4 me-5 ps-5'>For Sale Properties</h1>
+                <h1 className='text-primary mb-5 text-center bg-white rounded p-4 me-5 ps-5'>Property Posting Requests</h1>
                 <div className=' ps-5 pt-5 pb-5 me-5 mb-5 rounded bg-white'>
-
-                    <div className='text-end me-5 mb-5'>
-                        <Link to={"../Admin/ForSaleProperties/AddNew/"} className="btn btn-primary mb-4">
-                            Add Property +
-                        </Link>
-                    </div>
-
                     {
                         this.PropertyList()
                     }

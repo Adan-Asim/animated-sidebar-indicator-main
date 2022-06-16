@@ -25,12 +25,15 @@ const AboutUsRouter = require('./routes/AboutUs.route');
 const TeamMembersRouter = require('./routes/TeamMembers.route');
 const ForSalePropertiesRouter = require('./routes/ForSaleProperties.route');
 const ForRentPropertiesRouter = require('./routes/ForRentProperties.route');
+const SubmittedPropertyRequestsRouter = require('./routes/SubmittedPropertyRequests.route');
 
 app.use('/ContactUs', ContactUsRouter);
 app.use('/AboutUs', AboutUsRouter);
 app.use('/TeamMembers', TeamMembersRouter);
 app.use('/ForSaleProperties', ForSalePropertiesRouter);
 app.use('/ForRentProperties', ForRentPropertiesRouter);
+app.use('/SubmittedPropertyRequests', SubmittedPropertyRequestsRouter);
+
 
 app.listen(port, () => {
     console.log(`Server is running on port: ${port}`);

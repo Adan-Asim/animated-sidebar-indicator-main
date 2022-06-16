@@ -14,6 +14,8 @@ import EditForSaleProperty from './pages/EditForSaleProperty';
 import ForRentProperties from './pages/ForRentProperties';
 import AddNewForRentProperty from './pages/AddNewForRentProperty';
 import EditForRentProperty from './pages/EditForRentProperty';
+import SubmittedPropertyRequests from './pages/SubmittedPropertyRequests';
+import SubmitPropertyRequest from './pages/SubmitPropertyRequest';
 
 
 function App() {
@@ -30,9 +32,11 @@ function App() {
                     <Route path='/Admin/ForRentProperties' element={<ForRentProperties />} />
                     <Route path='/Admin/ForRentProperties/AddNew' element={<AddNewForRentProperty />} />
                     <Route path='/Admin/ForRentProperties/Edit/Property/:id' element={<EditForRentProperty />} />
+                    <Route path='/Admin/SubmittedPropertyRequests' element={<SubmittedPropertyRequests/>} />
                     <Route path='/Admin/TeamMembers' element={<TeamMembers />} />
                     <Route path='/Admin/Edit/Agent/:id' element={<EditAgent />} />
                     <Route path='/Admin/ContactUs/edit' element={<ContactUs />} />
+                    <Route path='/Admin/SubmitPropertyRequest' element={<SubmitPropertyRequest/>} />
                 </Route>
             </Routes>
         </BrowserRouter>

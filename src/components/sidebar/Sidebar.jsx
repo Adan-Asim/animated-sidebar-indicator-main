@@ -34,6 +34,12 @@ const sidebarNavItems = [
         section: 'Property'
     },
     {
+        display: 'Pending Requests',
+        icon: <i className='bx bx-chevrons-right'></i>,
+        to: '/Admin/SubmittedPropertyRequests',
+        section: 'Property'
+    },
+    {
         display: 'Team Members',
         icon: <i className='bx bx-group'></i>,
         to: '/Admin/TeamMembers',
