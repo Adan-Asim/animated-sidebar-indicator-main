@@ -19,6 +19,36 @@ const EditAgent = props => {
     let [instagram, setInstagram] = useState('');
     let [twitter, setTwitter] = useState('');
     let [linkedIn, setLinkedIn] = useState('');
+    let [image,setImage]=useState('');
+    let [url, setUrl] = useState("");
+
+    const uploadImage = () => {
+       
+        const data = new FormData()
+        data.append("file", image)
+        data.append("upload_preset", "RealEstate")
+        data.append("cloud_name", "doud75rhx")
+
+        fetch(" https://api.cloudinary.com/v1_1/doud75rhx/image/upload", {
+            method: "post",
+            body: data
+        })
+            .then(resp => resp.json())
+            .then(data => {
+                setUrl(data.url)
+
+                
+                
+            })
+            
+            .catch(err => console.log(err))
+        console.log("Cloudinary called");
+        console.log(data.url);
+       
+        
+    }
+
+    
 
     useEffect(() => {
         axios.get("http://localhost:4000/teamMembers/edit-teamMember/" + id)
@@ -29,16 +59,21 @@ const EditAgent = props => {
                 setInstagram(res.data.instagram);
                 setTwitter(res.data.twitter);
                 setLinkedIn(res.data.linkedIn);
+               // setImage(res.data.url);
             })
             .catch((err) => alert(err));
     }, id);
 
+    
 
     function submit(event) {
+     
+    // above
+      
         event.preventDefault();
 
         const Agent = {
-            image: 'none',
+            image: props.image,
             name: name,
             role: role,
             facebook: facebook,
@@ -46,12 +81,15 @@ const EditAgent = props => {
             twitter: twitter,
             linkedIn: linkedIn,
         }
+        console.log("Submit called");
 
         axios.put("http://localhost:4000/teamMembers/edit-teamMember/" + id, Agent)
             .then(res => { alert("Agent updated Successfully"); })
             .catch(res => alert("An unexpected error occured, occured make sure you filled all fields " + res.data));
         navigate("/Admin/TeamMembers", { replace: true });
     }
+
+    
 
 
     return (
@@ -154,9 +192,12 @@ const EditAgent = props => {
                             />
                         </Col>
                     </Form.Group>
+                   
+            
+        
 
                     <div className='text-center mt-5 mb-3'>
-                        <Button className='btn btn-primary btn-md ms-2 ps-3 pe-3' type="submit">
+                        <Button  className='btn btn-primary btn-md ms-2 ps-3 pe-3' type="submit">
                             Update
                         </Button>
                     </div>

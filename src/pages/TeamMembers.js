@@ -106,6 +106,25 @@ const Agent = props =>
                 />
             </Col>
         </Form.Group>
+        <Form.Group as={Row} className="mb-3" >
+            <Form.Label column sm={{ span: 3, offset: 1 }}>
+                <strong>
+                    Image:
+                </strong>
+            </Form.Label>
+            <Col sm={6}>
+                <img
+                width="100"
+                height="100"
+                
+            
+                   src={props.agent.image}
+                    placeholder="Paste Image here"
+                    defaultValue={props.agent.image}
+                    readonly
+                />
+            </Col>
+        </Form.Group>
         
 
         <div className='text-center mt-4 mb-5'>
@@ -163,6 +182,7 @@ export default class TeamMembers extends Component {
             return <Agent agent={currentagent} deleteAgent={this.deleteAgent} key={currentagent._id} count={count++}/>;
         })
     }
+    
 
 
     render() {
