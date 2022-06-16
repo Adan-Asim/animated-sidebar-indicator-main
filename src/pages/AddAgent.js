@@ -19,6 +19,7 @@ export default function AddAgent(props) {
     const [url, setUrl] = useState("");
 
     const uploadImage = () => {
+    
         const data = new FormData()
         data.append("file", image)
         data.append("upload_preset", "RealEstate")
@@ -36,11 +37,14 @@ export default function AddAgent(props) {
             })
             
             .catch(err => console.log(err))
+    
     }
 
 
     function submit(event) {
-        event.preventDefault();
+   
+       
+       event.preventDefault();
 
         const Agent = {
             image: url,
@@ -172,16 +176,23 @@ return (
                     <Form.Control
                         type="file"
                         placeholder="Add image here"
-                        name="photo"
+                    
                         defaultValue={image}
                         onChange={(e) => setImage((e.target.files[0]))}
+                       
                     />
-                    <button onClick={uploadImage}>Upload</button>
+                   
+                   <button onClick={uploadImage} className='text-center mt-4 mb-5 ps-3 ' style={{
+                position: 'relative',
+                right: 5,
+                
+          }} >Save Image </button>
                 </Col>
+                
             </Form.Group>
 
             <div className='text-center mt-5 mb-3'>
-                <Button className='btn btn-primary btn-md ms-2 ps-3 pe-3' type="submit">
+                <Button className='btn btn-primary btn-md ms-2 ps-3 pe-3' type="submit" >
                     Save
                 </Button>
             </div>

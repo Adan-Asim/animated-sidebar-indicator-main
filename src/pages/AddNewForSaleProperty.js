@@ -35,8 +35,32 @@ export default function AddNewForSaleProperty(props) {
 
     let [Places, setPlaces] = useState([]);
     let [PopularTags, setPopularTags] = useState([]);
+    const [url, setUrl] = useState("");
 
     const delimiters = [13, 188];
+
+    const uploadImage = () => {
+    
+        const data = new FormData()
+        data.append("file", MainImage)
+        data.append("upload_preset", "RealEstate")
+        data.append("cloud_name", "doud75rhx")
+
+        fetch(" https://api.cloudinary.com/v1_1/doud75rhx/image/upload", {
+            method: "post",
+            body: data
+        })
+            .then(resp => resp.json())
+            .then(data => {
+                setUrl(data.url)
+                console.log(data.url)
+                
+            })
+            
+            .catch(err => console.log(err))
+    
+    }
+
 
     function submit(event) {
         event.preventDefault();
@@ -51,8 +75,9 @@ export default function AddNewForSaleProperty(props) {
             Description: Description,
             PropertyMapLocation: PropertyMapLocation,
 
-            MainImage: "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
+          //  MainImage: "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
             Images: 'Images',
+            MainImage: url,
 
             Bedrooms: Bedrooms,
             Livingrooms: Livingrooms,
@@ -454,6 +479,31 @@ export default function AddNewForSaleProperty(props) {
                         />
                     </Col>
                 </Form.Group>
+                <Form.Group as={Row} className="mb-3" >
+                <Form.Label column sm={{ span: 3, offset: 1 }}>
+                    <strong>
+                        Main Image :
+                    </strong>
+                </Form.Label>
+                <Col sm={6}>
+                    <Form.Control
+                        type="file"
+                        placeholder="Add image here"
+                    
+                        defaultValue={MainImage}
+                        onChange={(e) => setMainImage((e.target.files[0]))}
+                       
+                    />
+                   <button onClick={uploadImage} className='text-center mt-4 mb-5 ps-3 ' style={{
+                position: 'relative',
+                right: 5,
+                
+          }} >Save Image </button>
+                   
+                </Col>
+                
+                
+            </Form.Group>
 
                 <div className='text-center mt-5 mb-3'>
                     <Button className='btn btn-primary btn-md ms-2 ps-3 pe-3' type="submit">
